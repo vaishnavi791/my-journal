@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Microphone</title>
+  <link rel="stylesheet" href="mic.css">
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="journal-window">
+    <header class="header">
+      <span class="brand-name">Microphone</span>
+      <button class="close-btn" onclick="window.location.href='menu.html'"><i class="fa fa-close"></i></button>
+    </header>
+
+    <div class="content">
+      <div class="mic-area">
+        <img src="mic.png" alt="Mic Icon" class="small-icon">
+        <button class="record-btn" id="recordBtn">🎤 Start Recording</button>
+      </div>
+      <button class="save-btn" id="saveAudio">save</button>
+    </div>
+  </div>
+
+  <script>
+    let chunks = [];
+    let recorder;
+    const recordBtn = document.getElementById('recordBtn');
+    const saveAudio = document.getElementById('saveAudio');
+
+    recordBtn.addEventListener('click', async () => {
+      if (!recorder || recorder.state === 'inactive') {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        recorder = new MediaRecorder(stream);
+        chunks = [];
+
+        recorder.ondataavailable = e => chunks.push(e.data);
+        recorder.onstop = () => {
+          const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
+          localStorage.setItem('journalAudio', URL.createObjectURL(blob));
+          alert('Recording saved 🎧');
+        };
+
+        recorder.start();
+        recordBtn.textContent = '⏹ Stop Recording';
+      } else {
+        recorder.stop();
+        recordBtn.textContent = '🎤 Start Recording';
+      }
+    });
+  </script>
+</body>
+</html>

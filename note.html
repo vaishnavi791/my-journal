@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notepad</title>
+  <link rel="stylesheet" href="note.css">
+  <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="journal-window">
+    <header class="header">
+      <span class="brand-name">Notepad</span>
+      <button class="close-btn" onclick="window.location.href='menu.html'"><i class="fa fa-close"></i></button>
+    </header>
+
+    <div class="content">
+      <div class="note-area">
+        <img src="note.png" alt="Note Icon" class="small-icon">
+        <textarea id="noteInput" placeholder="what are you feeling today..."></textarea>
+      </div>
+      <button class="save-btn" id="saveNote">save</button>
+    </div>
+  </div>
+
+  <script>
+    const noteField = document.getElementById('noteInput');
+    const saveBtn = document.getElementById('saveNote');
+
+    noteField.value = localStorage.getItem('journalNote') || '';
+
+    saveBtn.addEventListener('click', () => {
+      localStorage.setItem('journalNote', noteField.value);
+      alert('Note saved');
+    });
+  </script>
+</body>
+</html>
